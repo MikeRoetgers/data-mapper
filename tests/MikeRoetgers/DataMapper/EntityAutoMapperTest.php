@@ -6,8 +6,8 @@ class EntityAutoMapperTest extends \PHPUnit_Framework_TestCase
 {
     public function testAutoGet()
     {
-        $entity = $this->getMockBuilder('\stdClass')->disableAutoload()->disableOriginalConstructor()->setMethods(array('getId'))->getMock();
-        $entity->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $entity = new TestEntity();
+        $entity->setId('1');
 
         $mapper = new EntityAutoMapper();
         $id = $mapper->autoGet('id', $entity);
@@ -25,11 +25,12 @@ class EntityAutoMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAutoSet()
     {
-        $entity = $this->getMockBuilder('\stdClass')->disableAutoload()->disableOriginalConstructor()->setMethods(array('setId'))->getMock();
-        $entity->expects($this->any())->method('setId')->with($this->equalTo(1));
+        $entity = new TestEntity();
 
         $mapper = new EntityAutoMapper();
         $mapper->autoSet('id', 1, $entity);
+
+        $this->assertAttributeEquals(1, 'id', $entity);
     }
 
     public function testAutoSetException()
